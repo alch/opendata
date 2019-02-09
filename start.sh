@@ -19,7 +19,7 @@ else
 fi
 
 #if [[ ${SKIP_MIGRATIONS:-0} == 0 ]] ; then
-#  su -s /bin/bash -c './bin/console doctrine:migrations:migrate --no-interaction -e prod' --  www-data
+  su -s /bin/bash -c './bin/console doctrine:migrations:migrate --no-interaction -e prod' --  www-data
 #fi
 
 if [ "$@" ]; then

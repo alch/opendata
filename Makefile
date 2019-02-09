@@ -16,6 +16,8 @@ LATEST_IMAGE_NAME ?= $(IMAGE):latest
 build:
 	docker build . \
 		-t $(TAGGED_IMAGE_NAME) \
+		--build-arg NAMESPACE=$(NAMESPACE) \
+		--build-arg APPLICATION_NAME=$(APPLICATION_NAME)
 
 push: login-role push-tag
 
