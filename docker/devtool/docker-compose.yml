@@ -1,0 +1,33 @@
+version: "2.1"
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=${NAMESPACE}
+    volumes:
+    - ../mysql/:/etc/mysql/conf.d
+    ports:
+    - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+  web:
+    build:
+      context: ../..
+      args:
+      - NAMESPACE=${NAMESPACE}
+      - APPLICATION_NAME=${APPLICATION_NAME}
+    command: ./start.sh "bin/console server:run -vvv 0.0.0.0:8000"
+    volumes:
+    # in case you want to tweak your php.ini
+    #- ./php/php.ini:/usr/local/etc/php/php.ini
+    - ../..:/var/www/${NAMESPACE}-${APPLICATION_NAME}
+    ports:
+    - ${DEVTOOL_API_PORT}:8000
+    environment:
+    - DATABASE_URL=mysql://root:root@mysql:3306/hackaton
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/docs"]
+    depends_on:
+      mysql:
+        condition: service_healthy

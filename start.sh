@@ -2,12 +2,6 @@
 
 set -exo pipefail
 
-while ! mysqladmin ping -h${DATABASE_HOST:-localhost} --silent; do
-	echo "MYSQL NOT READY"
-    sleep 1
-done
-echo "MYSQL READY"
-
 if [[ ${XDEBUG_ENABLED:-"false"} == "true" ]] ; then
     echo "WARNING: XDEBUG LOADED!"
     echo "         xdebug being loaded on production even if its not enabled at all degrades performance!!"
